@@ -48,7 +48,7 @@ public class EventListenerTest {
         }
 
         @Override
-        public boolean has(String message) {
+        public Boolean has(String message) {
             return true;
         }
 

@@ -7,4 +7,6 @@ public interface Tracker {
     Boolean has(String message);
 
     void handle(String message, EventHandler e);
+
+    public Map<String, Integer> tracker();
 }

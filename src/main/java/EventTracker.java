@@ -11,18 +11,33 @@ public class EventTracker implements Tracker {
         this.tracker = new HashMap<>();
     }
 
+
     synchronized public static EventTracker getInstance() {
-        return null;
+        return INSTANCE;
     }
 
     synchronized public void push(String message) {
+        tracker.put(message, tracker.getOrDefault(message, 0) + 1);
     }
 
     synchronized public Boolean has(String message) {
-        return null;
+        return (tracker.getOrDefault(message, 0) > 0);
     }
 
     synchronized public void handle(String message, EventHandler e) {
+        e.handle();
+        try {
+            tracker.put(message,
+                    tracker.get(message) - 1);
+        }
+        catch (NullPointerException n){
+            System.out.println("Message is not currently tracked.");
+        }
+    }
+
+    @Override
+    public Map<String, Integer> tracker() {
+        return tracker;
     }
 
     // Do not use this. This constructor is for tests only
