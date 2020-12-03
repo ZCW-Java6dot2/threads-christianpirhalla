@@ -25,10 +25,10 @@ public class EventTracker implements Tracker {
     }
 
     synchronized public void handle(String message, EventHandler e) {
-        e.handle();
         try {
             tracker.put(message,
                     tracker.get(message) - 1);
+            e.handle();
         }
         catch (NullPointerException n){
             System.out.println("Message is not currently tracked.");

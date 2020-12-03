@@ -1,3 +1,8 @@
+import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
+import org.w3c.dom.ls.LSOutput;
+
+import java.sql.SQLOutput;
+
 public class EventListener extends Thread{
 
     private String messageToListenFor;
@@ -17,29 +22,32 @@ public class EventListener extends Thread{
     }
 
     public void run() {
-        while (readyToQuit()){
+        while (!readyToQuit()){
             if (shouldReply()) {
                 reply();
             }
         }
     }
 
-    public Boolean readyToQuit() {
+    public boolean readyToQuit() {
         return eventTracker.has("quit");
     }
 
-    public Boolean shouldReply() {
+    public boolean shouldReply() {
         return eventTracker.has(messageToListenFor);
     }
 
     public void reply() {
         class Handler implements EventHandler{
+            String message;
+            Handler(String message){
+                this.message = message;
+            }
             @Override
             public void handle() {
-                System.out.println(messageToReplyWith);
+                System.out.println(message);
             }
         }
-        eventTracker.handle(messageToReplyWith, new Handler());
-
+        eventTracker.handle(messageToListenFor, new Handler(messageToReplyWith));
     }
 }
